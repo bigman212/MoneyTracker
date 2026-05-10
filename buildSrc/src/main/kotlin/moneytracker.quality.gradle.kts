@@ -65,6 +65,8 @@ configure<DetektExtension> {
     config.setFrom(files("$rootDir/config/detekt/detekt.yml"))
 }
 
+dependencies.add("detektPlugins", project(":lint:detekt-rules"))
+
 tasks.withType<Detekt>().configureEach {
     reports {
         md.required.set(true)

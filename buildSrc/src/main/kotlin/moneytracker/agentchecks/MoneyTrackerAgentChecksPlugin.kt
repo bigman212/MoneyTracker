@@ -19,7 +19,6 @@ class MoneyTrackerAgentChecksPlugin : Plugin<Project> {
             "agentArchitectureCheck",
             "companionObjectTopCheck",
             "databaseBoundaryCheck",
-            "formattingConventionsCheck",
             "composeStabilityCheck",
             "spotlessCheck",
             "ktlintCheck",
@@ -39,8 +38,6 @@ class MoneyTrackerAgentChecksPlugin : Plugin<Project> {
             target.registerProjectRootCheck<ComposeStabilityCheckTask>("composeStabilityCheck")
         val databaseBoundaryCheck =
             target.registerProjectRootCheck<DatabaseBoundaryCheckTask>("databaseBoundaryCheck")
-        val formattingConventionsCheck =
-            target.registerProjectRootCheck<FormattingConventionsCheckTask>("formattingConventionsCheck")
 
         val agentCheck = target.tasks.register("agentCheck") {
             group = "verification"
@@ -50,7 +47,6 @@ class MoneyTrackerAgentChecksPlugin : Plugin<Project> {
                 agentArchitectureCheck,
                 companionObjectTopCheck,
                 databaseBoundaryCheck,
-                formattingConventionsCheck,
                 composeStabilityCheck
             )
         }

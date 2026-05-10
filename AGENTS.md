@@ -57,6 +57,7 @@ Kotlin formatting rules:
 
 - Data classes with multiple properties must put each property on its own line.
 - If one expression-bodied function in a group is multiline, keep the related expression-bodied functions multiline too.
+- Top-level types used by another top-level declaration in the same file must be declared first.
 
 ## Current Project Shape
 
@@ -90,6 +91,8 @@ Version and SDK compatibility comes from `gradle/libs.versions.toml` and convent
 - ViewModels do not know about Composable functions or Compose `Modifier`.
 - Composables receive state and callbacks; they do not fetch repositories directly.
 - Repository APIs should expose streams as `Flow` for observable data; use `suspend` only for one-shot commands.
+- Repository implementation names should end with `Impl`, not with their persistence technology.
+- Prefer a separate repository interface per aggregate/entity instead of one broad repository for unrelated data.
 - UI state should be immutable Kotlin data classes.
 - Feature modules own feature-specific UI state, events, and screen-level ViewModels.
 - Resources, theme values, typography, icons, and dimensions should come from `:core:designsystem` once that module exists.
@@ -100,6 +103,7 @@ Version and SDK compatibility comes from `gradle/libs.versions.toml` and convent
 - Use Hilt for DI. Do not introduce Koin or manual service locator containers.
 - Use kotlinx.serialization for JSON parsing. Do not introduce Gson, Moshi, Jackson, or `ObjectMapper`.
 - Use Room for database access in `:core:database`.
+- Mapper extension functions must use the `to*` prefix, for example `toDomain()` or `toEntity()`.
 - If detekt reports a violation, fix the design using SOLID/GRASP or an appropriate pattern. Do not suppress detekt findings unless the rule is provably wrong for the local context.
 - Hilt modules currently set `enableAggregatingTask = false` to avoid the known JavaPoet aggregate task conflict on this AGP/Kotlin stack; preserve it unless the stack is upgraded and `agentCheck` proves it is no longer needed.
 

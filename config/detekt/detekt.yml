@@ -44,3 +44,12 @@ complexity:
 exceptions:
   TooGenericExceptionCaught:
     active: false
+
+moneytracker-conventions:
+  active: true
+  DataClassMultilineProperties:
+    active: true
+  MapperFunctionPrefix:
+    active: true
+  TopLevelDeclarationOrder:
+    active: true
