@@ -1,15 +1,35 @@
-*.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
+# Gradle / Android build outputs
+.gradle/
+**/.gradle/
+build/
+**/build/
+.externalNativeBuild/
+**/.externalNativeBuild/
+.cxx/
+**/.cxx/
+captures/
+
+# Local machine configuration
 local.properties
+/local.properties
+*.keystore
+*.jks
+agents.error.md
+agents-error.md
+
+# Android Studio / IntelliJ
+*.iml
+.idea/*
+!.idea/codeStyles/
+!.idea/codeStyles/**
+!.idea/runConfigurations/
+!.idea/runConfigurations/**
+
+# Kotlin compiler sessions
+.kotlin/
+**/.kotlin/
+
+# OS files
+.DS_Store
+Thumbs.db
+agents-error.md

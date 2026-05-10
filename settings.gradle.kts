@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "MoneyTracker"
 include(":app")
+include(":core:database")

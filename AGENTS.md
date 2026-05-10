@@ -12,16 +12,9 @@ Use these exact Gradle commands from the repository root:
 - `./gradlew lintDebug`
 - `./gradlew assembleDebug`
 
-`agentCheck` runs matching tasks across all modules in this order:
-
-1. `spotlessCheck`
-2. `ktlintCheck`
-3. `detekt`
-4. `lintDebug`
-5. `testDebugUnitTest`
-6. `assembleDebug`
-
 `agentCheck` is the harness command. Do not assume plain `./gradlew check` is equivalent.
+
+Harness rule: each custom verification task must live in its own task file under `buildSrc/src/main/kotlin/moneytracker/agentchecks/`; `MoneyTrackerAgentChecksPlugin` should only orchestrate `agentCheck`.
 
 Useful fix commands:
 
@@ -30,25 +23,17 @@ Useful fix commands:
 
 Lint reports are generated under each module's `build/reports/` directory:
 
-- Android Lint: `build/reports/lint-results-debug.*`
-- detekt: `build/reports/detekt/detekt.*`
+- Android Lint: text and SARIF reports under `build/reports/`.
+- detekt: markdown and SARIF reports under `build/reports/detekt/`.
 - ktlint: `build/reports/ktlint/`
 - Spotless failures print a patch-style diff directly in Gradle output.
 
 ## Current Project Shape
 
-Active Gradle modules:
+Module-specific agent instructions live next to each module:
 
-- `:app` - Android application, package `com.moneytracker`, Compose UI entry point.
-
-Expected module layout when the project is split:
-
-- `:app` - app shell, navigation graph, DI wiring, Android entry points.
-- `:core:data` - repositories, local/remote data sources, persistence, DTO/entity mapping.
-- `:core:domain` - business models and use cases without Android UI dependencies.
-- `:core:ui` - reusable Compose UI primitives that are not brand/design-system tokens.
-- `:core:designsystem` - theme, typography, colors, icons, dimensions, app resources.
-- `:feature:*` - feature screens, feature ViewModels, feature-specific UI state/events.
+- [`:app`](app/AGENTS.md)
+- [`:core:database`](core/database/AGENTS.md)
 
 Dependency rules:
 
@@ -59,21 +44,16 @@ Dependency rules:
 - `:core:ui` may depend on Compose and `:core:designsystem`, but not on features.
 - `:core:designsystem` must not depend on features or data.
 
+New Android modules should use convention plugins instead of duplicating setup:
+
+- App modules: `id("moneytracker.android.application")`
+- Android library modules: `id("moneytracker.android.library")`
+- Shared quality tooling is applied from the root through `id("moneytracker.quality")`.
+- Agent harness tasks come from `id("moneytracker.agent-checks")`.
+
 ## Versions
 
-Keep API suggestions compatible with these project versions:
-
-- `minSdk = 26`
-- `targetSdk = 36`
-- `compileSdk = 36`
-- Android Gradle Plugin `8.13.2`
-- Kotlin `2.0.21`
-- Compose Compiler is provided by `org.jetbrains.kotlin.plugin.compose` version `2.0.21`.
-- Compose BOM `2024.09.00`
-- ktlint Gradle plugin `14.2.0`, ktlint CLI `1.8.0`
-- detekt `1.23.8`
-- Spotless `8.4.0`
-- Java/Kotlin JVM target `11`
+Version and SDK compatibility comes from `gradle/libs.versions.toml` and convention plugins in `buildSrc`. Do not update existing versions without explicit user approval.
 
 ## Load-Bearing Conventions
 
@@ -85,7 +65,13 @@ Keep API suggestions compatible with these project versions:
 - Resources, theme values, typography, icons, and dimensions should come from `:core:designsystem` once that module exists.
 - Keep version declarations in `gradle/libs.versions.toml`; do not hardcode dependency versions in module build files.
 - Keep Android entry points in `:app`; do not put Activities in feature modules unless the architecture is explicitly changed.
-- Prefer Kotlin/Compose APIs available for Kotlin `2.0.21`, AGP `8.13.2`, and minSdk `26`.
+- Prefer APIs compatible with versions declared in `gradle/libs.versions.toml`.
+- `companion object` must be the first declaration inside a class body.
+- Use Hilt for DI. Do not introduce Koin or manual service locator containers.
+- Use kotlinx.serialization for JSON parsing. Do not introduce Gson, Moshi, Jackson, or `ObjectMapper`.
+- Use Room for database access in `:core:database`.
+- If detekt reports a violation, fix the design using SOLID/GRASP or an appropriate pattern. Do not suppress detekt findings unless the rule is provably wrong for the local context.
+- Hilt modules currently set `enableAggregatingTask = false` to avoid the known JavaPoet aggregate task conflict on this AGP/Kotlin stack; preserve it unless the stack is upgraded and `agentCheck` proves it is no longer needed.
 
 ## Do Not Touch
 

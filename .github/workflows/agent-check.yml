@@ -1,0 +1,34 @@
+name: Agent Check
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - master
+
+concurrency:
+  group: agent-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  agent-check:
+    name: agentCheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Run agent checks
+        run: ./gradlew agentCheck --stacktrace
