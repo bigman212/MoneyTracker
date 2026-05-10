@@ -10,9 +10,9 @@ import org.gradle.api.tasks.TaskAction
  * Harness check for formatting decisions that are intentionally stricter than
  * the generic formatter defaults.
  */
-abstract class FormattingConventionsCheckTask : DefaultTask() {
+abstract class FormattingConventionsCheckTask : DefaultTask(), ProjectRootCheckTask {
     @get:Internal
-    abstract val projectRoot: DirectoryProperty
+    abstract override val projectRoot: DirectoryProperty
 
     init {
         group = "verification"

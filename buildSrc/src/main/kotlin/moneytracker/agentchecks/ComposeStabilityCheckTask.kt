@@ -11,9 +11,9 @@ import org.gradle.api.tasks.TaskAction
  * parameters. If it fails, inspect the reported type; if it is genuinely
  * immutable/stable, add it to config/compose/stability.conf with a comment.
  */
-abstract class ComposeStabilityCheckTask : DefaultTask() {
+abstract class ComposeStabilityCheckTask : DefaultTask(), ProjectRootCheckTask {
     @get:Internal
-    abstract val projectRoot: DirectoryProperty
+    abstract override val projectRoot: DirectoryProperty
 
     init {
         group = "verification"

@@ -2,6 +2,8 @@ package moneytracker.agentchecks
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.Task
+import org.gradle.api.tasks.TaskProvider
 
 /**
  * Registers the single root harness task: `agentCheck`.
@@ -13,7 +15,7 @@ import org.gradle.api.Project
 class MoneyTrackerAgentChecksPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         val agentCheckTaskNames = listOf(
-            "agentErrorsCheck",
+            "agentsDuplicateLinesCheck",
             "agentArchitectureCheck",
             "companionObjectTopCheck",
             "databaseBoundaryCheck",
@@ -27,53 +29,24 @@ class MoneyTrackerAgentChecksPlugin : Plugin<Project> {
             "assembleDebug",
         )
 
-        val companionObjectTopCheck = target.tasks.register(
-            "companionObjectTopCheck",
-            CompanionObjectTopCheckTask::class.java
-        ) {
-            projectRoot.set(target.layout.projectDirectory)
-        }
-
-        val agentArchitectureCheck = target.tasks.register(
-            "agentArchitectureCheck",
-            AgentArchitectureCheckTask::class.java
-        ) {
-            projectRoot.set(target.layout.projectDirectory)
-        }
-
-        val agentErrorsCheck = target.tasks.register(
-            "agentErrorsCheck",
-            AgentErrorsCheckTask::class.java
-        ) {
-            projectRoot.set(target.layout.projectDirectory)
-        }
-
-        val composeStabilityCheck = target.tasks.register(
-            "composeStabilityCheck",
-            ComposeStabilityCheckTask::class.java
-        ) {
-            projectRoot.set(target.layout.projectDirectory)
-        }
-
-        val databaseBoundaryCheck = target.tasks.register(
-            "databaseBoundaryCheck",
-            DatabaseBoundaryCheckTask::class.java
-        ) {
-            projectRoot.set(target.layout.projectDirectory)
-        }
-
-        val formattingConventionsCheck = target.tasks.register(
-            "formattingConventionsCheck",
-            FormattingConventionsCheckTask::class.java
-        ) {
-            projectRoot.set(target.layout.projectDirectory)
-        }
+        val companionObjectTopCheck =
+            target.registerProjectRootCheck<CompanionObjectTopCheckTask>("companionObjectTopCheck")
+        val agentsDuplicateLinesCheck =
+            target.registerProjectRootCheck<AgentsDuplicateLinesCheckTask>("agentsDuplicateLinesCheck")
+        val agentArchitectureCheck =
+            target.registerProjectRootCheck<AgentArchitectureCheckTask>("agentArchitectureCheck")
+        val composeStabilityCheck =
+            target.registerProjectRootCheck<ComposeStabilityCheckTask>("composeStabilityCheck")
+        val databaseBoundaryCheck =
+            target.registerProjectRootCheck<DatabaseBoundaryCheckTask>("databaseBoundaryCheck")
+        val formattingConventionsCheck =
+            target.registerProjectRootCheck<FormattingConventionsCheckTask>("formattingConventionsCheck")
 
         val agentCheck = target.tasks.register("agentCheck") {
             group = "verification"
             description = "Runs the full project harness check."
             dependsOn(
-                agentErrorsCheck,
+                agentsDuplicateLinesCheck,
                 agentArchitectureCheck,
                 companionObjectTopCheck,
                 databaseBoundaryCheck,
@@ -113,3 +86,9 @@ class MoneyTrackerAgentChecksPlugin : Plugin<Project> {
         }
     }
 }
+
+private inline fun <reified T> Project.registerProjectRootCheck(name: String): TaskProvider<T>
+    where T : Task, T : ProjectRootCheckTask =
+    tasks.register(name, T::class.java) {
+        projectRoot.set(layout.projectDirectory)
+    }

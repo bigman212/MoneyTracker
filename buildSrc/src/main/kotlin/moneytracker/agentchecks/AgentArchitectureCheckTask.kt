@@ -11,9 +11,9 @@ import org.gradle.api.tasks.TaskAction
  * cannot see reliably: Hilt for DI, kotlinx.serialization for JSON, and Room in
  * :core:database for persistence.
  */
-abstract class AgentArchitectureCheckTask : DefaultTask() {
+abstract class AgentArchitectureCheckTask : DefaultTask(), ProjectRootCheckTask {
     @get:Internal
-    abstract val projectRoot: DirectoryProperty
+    abstract override val projectRoot: DirectoryProperty
 
     init {
         group = "verification"

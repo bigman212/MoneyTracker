@@ -10,9 +10,9 @@ import org.gradle.api.tasks.TaskAction
  * Harness check: keeps Room implementation details inside :core:database and
  * prevents generated database ids from drifting back into Room annotations.
  */
-abstract class DatabaseBoundaryCheckTask : DefaultTask() {
+abstract class DatabaseBoundaryCheckTask : DefaultTask(), ProjectRootCheckTask {
     @get:Internal
-    abstract val projectRoot: DirectoryProperty
+    abstract override val projectRoot: DirectoryProperty
 
     init {
         group = "verification"
