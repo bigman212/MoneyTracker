@@ -91,7 +91,6 @@ Version and SDK compatibility comes from `gradle/libs.versions.toml` and convent
 - ViewModels do not know about Composable functions or Compose `Modifier`.
 - Composables receive state and callbacks; they do not fetch repositories directly.
 - Repository APIs should expose streams as `Flow` for observable data; use `suspend` only for one-shot commands.
-- Repository implementation names should end with `Impl`, not with their persistence technology.
 - Prefer a separate repository interface per aggregate/entity instead of one broad repository for unrelated data.
 - UI state should be immutable Kotlin data classes.
 - Feature modules own feature-specific UI state, events, and screen-level ViewModels.

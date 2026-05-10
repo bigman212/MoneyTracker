@@ -23,6 +23,7 @@ class MoneyTrackerAgentChecksPlugin : Plugin<Project> {
             "spotlessCheck",
             "ktlintCheck",
             "detekt",
+            "konsistCheck",
             "lintDebug",
             "testDebugUnitTest",
             "assembleDebug",
@@ -38,6 +39,10 @@ class MoneyTrackerAgentChecksPlugin : Plugin<Project> {
             target.registerProjectRootCheck<ComposeStabilityCheckTask>("composeStabilityCheck")
         val databaseBoundaryCheck =
             target.registerProjectRootCheck<DatabaseBoundaryCheckTask>("databaseBoundaryCheck")
+        val konsistCheck = target.tasks.register("konsistCheck") {
+            group = "verification"
+            description = "Runs Konsist architecture and declaration tests."
+        }
 
         val agentCheck = target.tasks.register("agentCheck") {
             group = "verification"
@@ -47,6 +52,7 @@ class MoneyTrackerAgentChecksPlugin : Plugin<Project> {
                 agentArchitectureCheck,
                 companionObjectTopCheck,
                 databaseBoundaryCheck,
+                konsistCheck,
                 composeStabilityCheck
             )
         }
@@ -74,6 +80,10 @@ class MoneyTrackerAgentChecksPlugin : Plugin<Project> {
                         project.tasks.findByName("compileDebugKotlin")
                     }
                 )
+            }
+
+            konsistCheck.configure {
+                dependsOn(target.project(":lint:detekt-rules").tasks.named("test"))
             }
 
             orderedTasks.zipWithNext { previousTask, nextTask ->

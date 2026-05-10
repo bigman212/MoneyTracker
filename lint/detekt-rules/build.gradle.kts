@@ -4,4 +4,7 @@ plugins {
 
 dependencies {
     compileOnly(libs.detekt.api)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.konsist)
 }
