@@ -31,6 +31,13 @@ android {
     }
 }
 
+composeCompiler {
+    reportsDestination = layout.buildDirectory.dir("reports/compose/compiler")
+    metricsDestination = layout.buildDirectory.dir("reports/compose/metrics")
+    stabilityConfigurationFile =
+        rootProject.layout.projectDirectory.file("config/compose/stability.conf")
+}
+
 hilt {
     enableAggregatingTask = false
 }
