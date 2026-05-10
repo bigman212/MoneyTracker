@@ -16,6 +16,21 @@ Use these exact Gradle commands from the repository root:
 
 Harness rule: each custom verification task must live in its own task file under `buildSrc/src/main/kotlin/moneytracker/agentchecks/`; `MoneyTrackerAgentChecksPlugin` should only orchestrate `agentCheck`.
 
+## Pull Requests
+
+Branch names must start with one of these prefixes:
+
+- `feature/`
+- `refactor/`
+- `bugfix/`
+- `ci/`
+
+PR titles must start with exactly one work scope in parentheses before the main title:
+
+- `(feat)`
+- `(fixes)`
+- `(refactor)`
+
 Useful fix commands:
 
 - `./gradlew spotlessApply`
