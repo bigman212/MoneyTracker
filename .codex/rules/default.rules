@@ -1,3 +1,32 @@
-prefix_rule(pattern=["./gradlew", "agentCheck"], decision="allow")
-prefix_rule(pattern=["git"], decision="allow")
-prefix_rule(pattern=["gh"], decision="allow")
+prefix_rule(
+    pattern = ["./gradlew", "agentCheck"],
+    decision = "allow",
+    justification = "Project harness verification is allowed.",
+    match = ["./gradlew agentCheck"],
+)
+
+prefix_rule(
+    pattern = ["git"],
+    decision = "allow",
+    justification = "Repository operations are allowed in this project.",
+    match = [
+        "git status --short --branch",
+        "git add AGENTS.md",
+        "git commit -m \"(feat) update project rules\"",
+        "git push",
+    ],
+    not_match = [
+        "rm -rf .git",
+    ],
+)
+
+prefix_rule(
+    pattern = ["gh"],
+    decision = "allow",
+    justification = "GitHub CLI operations are allowed in this project.",
+    match = [
+        "gh pr view 2 --json title,headRefName",
+        "gh pr create --base master --head ci/example --title \"(feat) example\"",
+        "gh pr edit 2 --title \"(feat) example\"",
+    ],
+)

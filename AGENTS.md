@@ -33,6 +33,14 @@ PR titles must start with exactly one work scope in parentheses before the main 
 - `(fixes)`
 - `(refactor)`
 
+Commit messages must follow the same scope rule. The title text after the scope must start with a lowercase letter.
+
+Examples:
+
+- `(feat) add compose stability harness`
+- `(fixes) handle missing compose reports`
+- `(refactor) move harness task wiring`
+
 Useful fix commands:
 
 - `./gradlew spotlessApply`
