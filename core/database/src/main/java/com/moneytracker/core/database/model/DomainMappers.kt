@@ -9,20 +9,20 @@ import com.moneytracker.core.domain.model.ExpenseCategoryId
 import com.moneytracker.core.domain.model.ExpenseId
 import java.time.Instant
 
-internal fun ExpenseAccountEntity.asDomain(): ExpenseAccount =
+internal fun ExpenseAccountEntity.toDomain(): ExpenseAccount =
     ExpenseAccount(
         id = ExpenseAccountId(id),
         name = name
     )
 
-internal fun ExpenseCategoryEntity.asDomain(): ExpenseCategory =
+internal fun ExpenseCategoryEntity.toDomain(): ExpenseCategory =
     ExpenseCategory(
         id = ExpenseCategoryId(id),
         name = name,
         color = CategoryColor(colorArgb)
     )
 
-internal fun ExpenseEntity.asDomain(): Expense =
+internal fun ExpenseEntity.toDomain(): Expense =
     Expense(
         id = ExpenseId(id),
         name = name,
@@ -31,7 +31,7 @@ internal fun ExpenseEntity.asDomain(): Expense =
         accountId = ExpenseAccountId(accountId)
     )
 
-internal fun Expense.asEntity(): ExpenseEntity =
+internal fun Expense.toEntity(): ExpenseEntity =
     ExpenseEntity(
         id = id.value,
         name = name,

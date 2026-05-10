@@ -5,8 +5,8 @@ import com.moneytracker.core.database.dao.ExpenseCategoryDao
 import com.moneytracker.core.database.dao.ExpenseDao
 import com.moneytracker.core.database.model.ExpenseAccountEntity
 import com.moneytracker.core.database.model.ExpenseCategoryEntity
-import com.moneytracker.core.database.model.asDomain
-import com.moneytracker.core.database.model.asEntity
+import com.moneytracker.core.database.model.toDomain
+import com.moneytracker.core.database.model.toEntity
 import com.moneytracker.core.domain.model.Expense
 import com.moneytracker.core.domain.model.ExpenseAccount
 import com.moneytracker.core.domain.model.ExpenseAccountId
@@ -23,17 +23,17 @@ class ExpenseLocalDataSource internal constructor(
 ) {
     fun observeExpenses(): Flow<List<Expense>> =
         expenseDao.observeExpenses().map { expenses ->
-            expenses.map { expense -> expense.asDomain() }
+            expenses.map { expense -> expense.toDomain() }
         }
 
     fun observeExpenseAccounts(): Flow<List<ExpenseAccount>> =
         expenseAccountDao.observeExpenseAccounts().map { accounts ->
-            accounts.map { account -> account.asDomain() }
+            accounts.map { account -> account.toDomain() }
         }
 
     fun observeCategories(): Flow<List<ExpenseCategory>> =
         expenseCategoryDao.observeCategories().map { categories ->
-            categories.map { category -> category.asDomain() }
+            categories.map { category -> category.toDomain() }
         }
 
     suspend fun nextExpenseId(): ExpenseId =
@@ -46,7 +46,7 @@ class ExpenseLocalDataSource internal constructor(
         ExpenseCategoryId(expenseCategoryDao.getMaxExpenseCategoryId() + 1)
 
     suspend fun upsertExpense(expense: Expense) {
-        expenseDao.upsertExpense(expense.asEntity())
+        expenseDao.upsertExpense(expense.toEntity())
     }
 
     suspend fun upsertExpenseAccount(account: ExpenseAccount) {

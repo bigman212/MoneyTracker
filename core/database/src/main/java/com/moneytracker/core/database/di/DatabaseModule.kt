@@ -23,7 +23,7 @@ object DatabaseModule {
             MoneyTrackerDatabase::class.java,
             "money_tracker.db"
         )
-            .addCallback(MoneyTrackerDatabaseCallback())
+            .addCallback(MoneyTrackerDatabaseCallback(context))
             .build()
 
     @Provides

@@ -2,6 +2,9 @@ package com.moneytracker.core.domain.model
 
 import java.time.Instant
 
+@JvmInline
+value class ExpenseId(val value: Long)
+
 data class Expense(
     val id: ExpenseId,
     val name: String,
@@ -9,6 +12,3 @@ data class Expense(
     val spentAt: Instant,
     val accountId: ExpenseAccountId
 )
-
-@JvmInline
-value class ExpenseId(val value: Long)
