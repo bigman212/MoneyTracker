@@ -18,6 +18,8 @@ hilt {
 }
 
 dependencies {
+    implementation(project(":core:domain"))
+
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime)
     implementation(libs.hilt.android)

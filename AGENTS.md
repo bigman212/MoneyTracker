@@ -53,6 +53,11 @@ Lint reports are generated under each module's `build/reports/` directory:
 - ktlint: `build/reports/ktlint/`
 - Spotless failures print a patch-style diff directly in Gradle output.
 
+Kotlin formatting rules:
+
+- Data classes with multiple properties must put each property on its own line.
+- If one expression-bodied function in a group is multiline, keep the related expression-bodied functions multiline too.
+
 ## Current Project Shape
 
 Module-specific agent instructions live next to each module:
@@ -95,6 +100,9 @@ Version and SDK compatibility comes from `gradle/libs.versions.toml` and convent
 - Use Hilt for DI. Do not introduce Koin or manual service locator containers.
 - Use kotlinx.serialization for JSON parsing. Do not introduce Gson, Moshi, Jackson, or `ObjectMapper`.
 - Use Room for database access in `:core:database`.
+- Room DAO and Entity types must be `internal` and must not be imported outside `:core:database`.
+- Do not use `autoGenerate = true`; repositories generate ids in code before writing.
+- Prefer `@Upsert` for DAO writes. Do not use `OnConflictStrategy.ABORT`.
 - If detekt reports a violation, fix the design using SOLID/GRASP or an appropriate pattern. Do not suppress detekt findings unless the rule is provably wrong for the local context.
 - Hilt modules currently set `enableAggregatingTask = false` to avoid the known JavaPoet aggregate task conflict on this AGP/Kotlin stack; preserve it unless the stack is upgraded and `agentCheck` proves it is no longer needed.
 

@@ -4,9 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.moneytracker.core.database.MoneyTrackerDatabase
 import com.moneytracker.core.database.MoneyTrackerDatabaseCallback
-import com.moneytracker.core.database.dao.AccountDao
-import com.moneytracker.core.database.dao.ExpenseCategoryDao
-import com.moneytracker.core.database.dao.ExpenseDao
+import com.moneytracker.core.database.local.ExpenseLocalDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,12 +27,10 @@ object DatabaseModule {
             .build()
 
     @Provides
-    fun provideAccountDao(database: MoneyTrackerDatabase): AccountDao = database.accountDao()
-
-    @Provides
-    fun provideExpenseCategoryDao(database: MoneyTrackerDatabase): ExpenseCategoryDao =
-        database.expenseCategoryDao()
-
-    @Provides
-    fun provideExpenseDao(database: MoneyTrackerDatabase): ExpenseDao = database.expenseDao()
+    fun provideExpenseLocalDataSource(database: MoneyTrackerDatabase): ExpenseLocalDataSource =
+        ExpenseLocalDataSource(
+            expenseAccountDao = database.expenseAccountDao(),
+            expenseCategoryDao = database.expenseCategoryDao(),
+            expenseDao = database.expenseDao()
+        )
 }

@@ -4,11 +4,11 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "accounts")
-data class AccountEntity(
-    @PrimaryKey(autoGenerate = true)
+@Entity(tableName = "expense_accounts")
+internal data class ExpenseAccountEntity(
+    @PrimaryKey
     @ColumnInfo(name = "id")
-    val id: Long = 0,
+    val id: Long,
     @ColumnInfo(name = "name")
     val name: String
 )

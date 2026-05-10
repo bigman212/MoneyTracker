@@ -16,7 +16,7 @@ import androidx.room.PrimaryKey
             onDelete = ForeignKey.RESTRICT
         ),
         ForeignKey(
-            entity = AccountEntity::class,
+            entity = ExpenseAccountEntity::class,
             parentColumns = ["id"],
             childColumns = ["account_id"],
             onDelete = ForeignKey.RESTRICT
@@ -28,10 +28,10 @@ import androidx.room.PrimaryKey
         Index(value = ["spent_at_epoch_millis"])
     ]
 )
-data class ExpenseEntity(
-    @PrimaryKey(autoGenerate = true)
+internal data class ExpenseEntity(
+    @PrimaryKey
     @ColumnInfo(name = "id")
-    val id: Long = 0,
+    val id: Long,
     @ColumnInfo(name = "name")
     val name: String,
     @ColumnInfo(name = "category_id")

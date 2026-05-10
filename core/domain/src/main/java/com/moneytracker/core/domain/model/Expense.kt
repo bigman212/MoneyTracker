@@ -7,7 +7,7 @@ data class Expense(
     val name: String,
     val categoryId: ExpenseCategoryId,
     val spentAt: Instant,
-    val accountId: AccountId
+    val accountId: ExpenseAccountId
 )
 
 @JvmInline

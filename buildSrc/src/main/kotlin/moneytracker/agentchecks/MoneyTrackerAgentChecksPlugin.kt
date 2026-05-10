@@ -16,6 +16,8 @@ class MoneyTrackerAgentChecksPlugin : Plugin<Project> {
             "agentErrorsCheck",
             "agentArchitectureCheck",
             "companionObjectTopCheck",
+            "databaseBoundaryCheck",
+            "formattingConventionsCheck",
             "composeStabilityCheck",
             "spotlessCheck",
             "ktlintCheck",
@@ -53,10 +55,31 @@ class MoneyTrackerAgentChecksPlugin : Plugin<Project> {
             projectRoot.set(target.layout.projectDirectory)
         }
 
+        val databaseBoundaryCheck = target.tasks.register(
+            "databaseBoundaryCheck",
+            DatabaseBoundaryCheckTask::class.java
+        ) {
+            projectRoot.set(target.layout.projectDirectory)
+        }
+
+        val formattingConventionsCheck = target.tasks.register(
+            "formattingConventionsCheck",
+            FormattingConventionsCheckTask::class.java
+        ) {
+            projectRoot.set(target.layout.projectDirectory)
+        }
+
         val agentCheck = target.tasks.register("agentCheck") {
             group = "verification"
             description = "Runs the full project harness check."
-            dependsOn(agentErrorsCheck, agentArchitectureCheck, companionObjectTopCheck, composeStabilityCheck)
+            dependsOn(
+                agentErrorsCheck,
+                agentArchitectureCheck,
+                companionObjectTopCheck,
+                databaseBoundaryCheck,
+                formattingConventionsCheck,
+                composeStabilityCheck
+            )
         }
 
         target.gradle.projectsEvaluated {

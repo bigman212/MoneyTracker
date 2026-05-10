@@ -5,10 +5,10 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "expense_categories")
-data class ExpenseCategoryEntity(
-    @PrimaryKey(autoGenerate = true)
+internal data class ExpenseCategoryEntity(
+    @PrimaryKey
     @ColumnInfo(name = "id")
-    val id: Long = 0,
+    val id: Long,
     @ColumnInfo(name = "name")
     val name: String,
     @ColumnInfo(name = "color_argb")
