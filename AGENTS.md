@@ -18,6 +18,8 @@ Harness rule: each custom verification task must live in its own task file under
 
 ## Pull Requests
 
+Agents may run `git` and `gh` commands for local repository, branch, commit, push, and pull request work.
+
 Branch names must start with one of these prefixes:
 
 - `feature/`
