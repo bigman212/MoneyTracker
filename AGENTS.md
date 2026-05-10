@@ -62,10 +62,10 @@ Module-specific agent instructions live next to each module:
 
 Dependency rules:
 
-- `:app` may depend on `:feature:*`, `:core:ui`, `:core:designsystem`, and DI/runtime modules.
+- `:app` may depend on `:feature:*`, `:core:data`, `:core:ui`, `:core:designsystem`, and DI/runtime modules.
 - `:feature:*` may depend on `:core:domain`, `:core:ui`, and `:core:designsystem`.
 - `:core:domain` must not depend on Android UI, Compose, or data implementation modules.
-- `:core:data` may depend on `:core:domain`, but features must not depend on data implementations directly.
+- `:core:data` may depend on `:core:domain` and persistence modules such as `:core:database`, but features must not depend on data implementations directly.
 - `:core:ui` may depend on Compose and `:core:designsystem`, but not on features.
 - `:core:designsystem` must not depend on features or data.
 
