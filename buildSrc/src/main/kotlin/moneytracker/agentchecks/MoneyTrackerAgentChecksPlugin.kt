@@ -13,8 +13,10 @@ import org.gradle.api.Project
 class MoneyTrackerAgentChecksPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         val agentCheckTaskNames = listOf(
+            "agentErrorsCheck",
             "agentArchitectureCheck",
             "companionObjectTopCheck",
+            "composeStabilityCheck",
             "spotlessCheck",
             "ktlintCheck",
             "detekt",
@@ -37,10 +39,24 @@ class MoneyTrackerAgentChecksPlugin : Plugin<Project> {
             projectRoot.set(target.layout.projectDirectory)
         }
 
+        val agentErrorsCheck = target.tasks.register(
+            "agentErrorsCheck",
+            AgentErrorsCheckTask::class.java
+        ) {
+            projectRoot.set(target.layout.projectDirectory)
+        }
+
+        val composeStabilityCheck = target.tasks.register(
+            "composeStabilityCheck",
+            ComposeStabilityCheckTask::class.java
+        ) {
+            projectRoot.set(target.layout.projectDirectory)
+        }
+
         val agentCheck = target.tasks.register("agentCheck") {
             group = "verification"
             description = "Runs the full project harness check."
-            dependsOn(companionObjectTopCheck, agentArchitectureCheck)
+            dependsOn(agentErrorsCheck, agentArchitectureCheck, companionObjectTopCheck, composeStabilityCheck)
         }
 
         target.gradle.projectsEvaluated {
@@ -58,6 +74,14 @@ class MoneyTrackerAgentChecksPlugin : Plugin<Project> {
 
             agentCheck.configure {
                 dependsOn(orderedTasks)
+            }
+
+            composeStabilityCheck.configure {
+                dependsOn(
+                    target.allprojects.mapNotNull { project ->
+                        project.tasks.findByName("compileDebugKotlin")
+                    }
+                )
             }
 
             orderedTasks.zipWithNext { previousTask, nextTask ->
