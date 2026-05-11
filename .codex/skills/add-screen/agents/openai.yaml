@@ -1,0 +1,7 @@
+interface:
+  display_name: "Add Screen"
+  short_description: "Compose screen workflow with Paparazzi"
+  default_prompt: "Use $add-screen to add or update a MoneyTracker Compose screen."
+
+policy:
+  allow_implicit_invocation: true

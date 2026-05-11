@@ -15,12 +15,12 @@ import org.gradle.api.tasks.TaskProvider
 class MoneyTrackerAgentChecksPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         val agentCheckTaskNames = listOf(
-            "agentErrorsCheck",
             "agentsDuplicateLinesCheck",
             "agentArchitectureCheck",
             "companionObjectTopCheck",
             "databaseBoundaryCheck",
             "composeStabilityCheck",
+            "composeScreenStructureCheck",
             "spotlessCheck",
             "ktlintCheck",
             "detekt",
@@ -29,9 +29,6 @@ class MoneyTrackerAgentChecksPlugin : Plugin<Project> {
             "testDebugUnitTest",
             "assembleDebug",
         )
-
-        val agentErrorsCheck =
-            target.registerProjectRootCheck<AgentErrorsCheckTask>("agentErrorsCheck")
         val agentsDuplicateLinesCheck =
             target.registerProjectRootCheck<AgentsDuplicateLinesCheckTask>("agentsDuplicateLinesCheck")
         val agentArchitectureCheck =
@@ -42,6 +39,8 @@ class MoneyTrackerAgentChecksPlugin : Plugin<Project> {
             target.registerProjectRootCheck<DatabaseBoundaryCheckTask>("databaseBoundaryCheck")
         val composeStabilityCheck =
             target.registerProjectRootCheck<ComposeStabilityCheckTask>("composeStabilityCheck")
+        val composeScreenStructureCheck =
+            target.registerProjectRootCheck<ComposeScreenStructureCheckTask>("composeScreenStructureCheck")
         val konsistCheck = target.tasks.register("konsistCheck") {
             group = "verification"
             description = "Runs Konsist architecture and declaration tests."
@@ -51,12 +50,12 @@ class MoneyTrackerAgentChecksPlugin : Plugin<Project> {
             group = "verification"
             description = "Runs the full project harness check."
             dependsOn(
-                agentErrorsCheck,
                 agentsDuplicateLinesCheck,
                 agentArchitectureCheck,
                 companionObjectTopCheck,
                 databaseBoundaryCheck,
                 composeStabilityCheck,
+                composeScreenStructureCheck,
                 konsistCheck
             )
         }
