@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MoneyTracker</string>
+    <string name="main_toolbar_title">Toolbar</string>
+    <string name="main_today_expenses">Расходы на\nсегодня</string>
 </resources>
