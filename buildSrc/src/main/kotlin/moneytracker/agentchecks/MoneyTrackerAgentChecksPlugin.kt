@@ -15,6 +15,7 @@ import org.gradle.api.tasks.TaskProvider
 class MoneyTrackerAgentChecksPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         val agentCheckTaskNames = listOf(
+            "agentErrorsCheck",
             "agentsDuplicateLinesCheck",
             "agentArchitectureCheck",
             "companionObjectTopCheck",
@@ -29,16 +30,18 @@ class MoneyTrackerAgentChecksPlugin : Plugin<Project> {
             "assembleDebug",
         )
 
-        val companionObjectTopCheck =
-            target.registerProjectRootCheck<CompanionObjectTopCheckTask>("companionObjectTopCheck")
+        val agentErrorsCheck =
+            target.registerProjectRootCheck<AgentErrorsCheckTask>("agentErrorsCheck")
         val agentsDuplicateLinesCheck =
             target.registerProjectRootCheck<AgentsDuplicateLinesCheckTask>("agentsDuplicateLinesCheck")
         val agentArchitectureCheck =
             target.registerProjectRootCheck<AgentArchitectureCheckTask>("agentArchitectureCheck")
-        val composeStabilityCheck =
-            target.registerProjectRootCheck<ComposeStabilityCheckTask>("composeStabilityCheck")
+        val companionObjectTopCheck =
+            target.registerProjectRootCheck<CompanionObjectTopCheckTask>("companionObjectTopCheck")
         val databaseBoundaryCheck =
             target.registerProjectRootCheck<DatabaseBoundaryCheckTask>("databaseBoundaryCheck")
+        val composeStabilityCheck =
+            target.registerProjectRootCheck<ComposeStabilityCheckTask>("composeStabilityCheck")
         val konsistCheck = target.tasks.register("konsistCheck") {
             group = "verification"
             description = "Runs Konsist architecture and declaration tests."
@@ -48,12 +51,13 @@ class MoneyTrackerAgentChecksPlugin : Plugin<Project> {
             group = "verification"
             description = "Runs the full project harness check."
             dependsOn(
+                agentErrorsCheck,
                 agentsDuplicateLinesCheck,
                 agentArchitectureCheck,
                 companionObjectTopCheck,
                 databaseBoundaryCheck,
-                konsistCheck,
-                composeStabilityCheck
+                composeStabilityCheck,
+                konsistCheck
             )
         }
 
