@@ -18,6 +18,8 @@ Harness rule: each custom verification task must live in its own task file under
 
 ## Pull Requests
 
+Agents may run `git` and `gh` commands for local repository, branch, commit, push, and pull request work.
+
 Branch names must start with one of these prefixes:
 
 - `feature/`
@@ -31,6 +33,14 @@ PR titles must start with exactly one work scope in parentheses before the main 
 - `(fixes)`
 - `(refactor)`
 
+Commit messages must follow the same scope rule. The title text after the scope must start with a lowercase letter.
+
+Examples:
+
+- `(feat) add compose stability harness`
+- `(fixes) handle missing compose reports`
+- `(refactor) move harness task wiring`
+
 Useful fix commands:
 
 - `./gradlew spotlessApply`
@@ -43,6 +53,12 @@ Lint reports are generated under each module's `build/reports/` directory:
 - ktlint: `build/reports/ktlint/`
 - Spotless failures print a patch-style diff directly in Gradle output.
 
+Kotlin formatting rules:
+
+- Data classes with multiple properties must put each property on its own line.
+- If one expression-bodied function in a group is multiline, keep the related expression-bodied functions multiline too.
+- Top-level types used by another top-level declaration in the same file must be declared first.
+
 ## Current Project Shape
 
 Module-specific agent instructions live next to each module:
@@ -52,10 +68,10 @@ Module-specific agent instructions live next to each module:
 
 Dependency rules:
 
-- `:app` may depend on `:feature:*`, `:core:ui`, `:core:designsystem`, and DI/runtime modules.
+- `:app` may depend on `:feature:*`, `:core:data`, `:core:ui`, `:core:designsystem`, and DI/runtime modules.
 - `:feature:*` may depend on `:core:domain`, `:core:ui`, and `:core:designsystem`.
 - `:core:domain` must not depend on Android UI, Compose, or data implementation modules.
-- `:core:data` may depend on `:core:domain`, but features must not depend on data implementations directly.
+- `:core:data` may depend on `:core:domain` and persistence modules such as `:core:database`, but features must not depend on data implementations directly.
 - `:core:ui` may depend on Compose and `:core:designsystem`, but not on features.
 - `:core:designsystem` must not depend on features or data.
 
@@ -75,6 +91,7 @@ Version and SDK compatibility comes from `gradle/libs.versions.toml` and convent
 - ViewModels do not know about Composable functions or Compose `Modifier`.
 - Composables receive state and callbacks; they do not fetch repositories directly.
 - Repository APIs should expose streams as `Flow` for observable data; use `suspend` only for one-shot commands.
+- Prefer a separate repository interface per aggregate/entity instead of one broad repository for unrelated data.
 - UI state should be immutable Kotlin data classes.
 - Feature modules own feature-specific UI state, events, and screen-level ViewModels.
 - Resources, theme values, typography, icons, and dimensions should come from `:core:designsystem` once that module exists.
@@ -85,6 +102,7 @@ Version and SDK compatibility comes from `gradle/libs.versions.toml` and convent
 - Use Hilt for DI. Do not introduce Koin or manual service locator containers.
 - Use kotlinx.serialization for JSON parsing. Do not introduce Gson, Moshi, Jackson, or `ObjectMapper`.
 - Use Room for database access in `:core:database`.
+- Mapper extension functions must use the `to*` prefix, for example `toDomain()` or `toEntity()`.
 - If detekt reports a violation, fix the design using SOLID/GRASP or an appropriate pattern. Do not suppress detekt findings unless the rule is provably wrong for the local context.
 - Hilt modules currently set `enableAggregatingTask = false` to avoid the known JavaPoet aggregate task conflict on this AGP/Kotlin stack; preserve it unless the stack is upgraded and `agentCheck` proves it is no longer needed.
 

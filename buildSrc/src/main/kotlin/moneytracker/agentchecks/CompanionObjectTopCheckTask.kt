@@ -10,9 +10,9 @@ import org.gradle.api.tasks.TaskAction
  * Harness check: every class with a companion object must place it as the first
  * declaration in the class body. This is project convention, not Kotlin default style.
  */
-abstract class CompanionObjectTopCheckTask : DefaultTask() {
+abstract class CompanionObjectTopCheckTask : DefaultTask(), ProjectRootCheckTask {
     @get:Internal
-    abstract val projectRoot: DirectoryProperty
+    abstract override val projectRoot: DirectoryProperty
 
     init {
         group = "verification"

@@ -21,4 +21,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "MoneyTracker"
 include(":app")
+include(":core:data")
+include(":core:domain")
 include(":core:database")
+include(":lint:detekt-rules")

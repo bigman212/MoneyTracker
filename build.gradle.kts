@@ -9,7 +9,7 @@ plugins {
 }
 
 subprojects {
-    if (buildFile.exists()) {
+    if (buildFile.exists() && path != ":lint:detekt-rules") {
         apply(plugin = "moneytracker.quality")
     }
 }

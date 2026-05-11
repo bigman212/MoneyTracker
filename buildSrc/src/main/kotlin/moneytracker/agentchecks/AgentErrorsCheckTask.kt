@@ -10,9 +10,9 @@ import org.gradle.api.tasks.TaskAction
  * Harness check: reads agents.error.md and fails on unresolved agent-process
  * mistakes. Lines marked with `(fixed)` are treated as historical notes.
  */
-abstract class AgentErrorsCheckTask : DefaultTask() {
+abstract class AgentErrorsCheckTask : DefaultTask(), ProjectRootCheckTask {
     @get:Internal
-    abstract val projectRoot: DirectoryProperty
+    abstract override val projectRoot: DirectoryProperty
 
     init {
         group = "verification"

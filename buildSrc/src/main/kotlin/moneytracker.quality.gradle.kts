@@ -22,6 +22,8 @@ configure<SpotlessExtension> {
                 mapOf(
                     "ktlint_code_style" to "android_studio",
                     "ktlint_function_naming_ignore_when_annotated_with" to "Composable",
+                    "ktlint_class_signature_rule_force_multiline_when_parameter_count_greater_or_equal_than" to "2",
+                    "ktlint_function_signature_body_expression_wrapping" to "always",
                 )
             )
     }
@@ -62,6 +64,8 @@ configure<DetektExtension> {
     basePath = rootDir.absolutePath
     config.setFrom(files("$rootDir/config/detekt/detekt.yml"))
 }
+
+dependencies.add("detektPlugins", project(":lint:detekt-rules"))
 
 tasks.withType<Detekt>().configureEach {
     reports {
