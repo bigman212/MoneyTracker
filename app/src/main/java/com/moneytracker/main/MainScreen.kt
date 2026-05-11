@@ -112,7 +112,11 @@ fun previewMainScreenUi(): MainScreenUi =
         expenses = List(20) { index ->
             ExpenseRowUi(
                 id = index.toString(),
-                title = "Название расхода",
+                title = if (index == 0) {
+                    "Очень длинное название расхода"
+                } else {
+                    "Название расхода"
+                },
                 category = "Такси",
                 amount = "1.2 руб"
             )
