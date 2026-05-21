@@ -1,0 +1,7 @@
+interface:
+  display_name: "Version Upgrade"
+  short_description: "Checks for Kotlin, SDK, AGP, and build-critical upgrades"
+  default_prompt: "Use $version-upgrade to update a MoneyTracker build-critical version."
+
+policy:
+  allow_implicit_invocation: true

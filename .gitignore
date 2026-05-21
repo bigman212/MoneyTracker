@@ -8,6 +8,7 @@ build/
 .cxx/
 **/.cxx/
 captures/
+**/src/test/snapshots/**/*.png
 
 # Local machine configuration
 local.properties

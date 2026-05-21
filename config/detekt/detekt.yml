@@ -31,6 +31,8 @@ naming:
   FunctionNaming:
     ignoreAnnotated:
       - "Composable"
+  MatchingDeclarationName:
+    active: false
 
 complexity:
   LongMethod:
