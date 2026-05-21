@@ -21,6 +21,7 @@ class MoneyTrackerAgentChecksPlugin : Plugin<Project> {
             "databaseBoundaryCheck",
             "composeStabilityCheck",
             "composeScreenStructureCheck",
+            "composeOpaqueContainerColorCheck",
             "spotlessCheck",
             "ktlintCheck",
             "detekt",
@@ -41,6 +42,8 @@ class MoneyTrackerAgentChecksPlugin : Plugin<Project> {
             target.registerProjectRootCheck<ComposeStabilityCheckTask>("composeStabilityCheck")
         val composeScreenStructureCheck =
             target.registerProjectRootCheck<ComposeScreenStructureCheckTask>("composeScreenStructureCheck")
+        val composeOpaqueContainerColorCheck =
+            target.registerProjectRootCheck<ComposeOpaqueContainerColorCheckTask>("composeOpaqueContainerColorCheck")
         val konsistCheck = target.tasks.register("konsistCheck") {
             group = "verification"
             description = "Runs Konsist architecture and declaration tests."
@@ -56,6 +59,7 @@ class MoneyTrackerAgentChecksPlugin : Plugin<Project> {
                 databaseBoundaryCheck,
                 composeStabilityCheck,
                 composeScreenStructureCheck,
+                composeOpaqueContainerColorCheck,
                 konsistCheck
             )
         }

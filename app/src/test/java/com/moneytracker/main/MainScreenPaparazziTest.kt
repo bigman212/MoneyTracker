@@ -18,4 +18,11 @@ class MainScreenPaparazziTest {
             MainScreenLoadedPreview()
         }
     }
+
+    @Test
+    fun expenseRowPreview() {
+        paparazzi.snapshot {
+            ExpenseRowPreview()
+        }
+    }
 }

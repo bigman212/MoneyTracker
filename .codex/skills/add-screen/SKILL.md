@@ -17,8 +17,9 @@ When creating or changing a screen:
    If the screen has multiple states (`Loading`, `Empty`, `Loaded`, `Error`), add one preview for each state.
 2. Always add a Paparazzi test for every preview.
 3. Run `./gradlew :app:recordPaparazziDebug` for the fast render loop and report the list of created or changed PNG files to the user.
-4. Do not commit PNG snapshots until the user explicitly approves them.
-5. Only after user approval, stage `src/test/snapshots/` and commit the snapshot PNGs.
+4. Show the generated or changed PNG to the user and wait for explicit design approval before committing any UI code.
+5. Do not commit PNG snapshots until the user explicitly approves them.
+6. Do not stage or commit `src/test/snapshots/` unless the user explicitly asks to version snapshot PNGs after approval.
 
 The aggregate `./gradlew recordPaparazzi` may run release Paparazzi/unit-test tasks. Do not use it for the fast render loop unless the change specifically touches release-only behavior or all variants must be refreshed; `./gradlew agentCheck` remains the final full verification before commit.
 
@@ -47,3 +48,4 @@ Snapshot PNG files under `src/test/snapshots/` are gitignored by default. Treat 
 - A composable that accepts `Modifier` must declare it as the first optional parameter with the default value `Modifier`.
 - Do not add a `Modifier` parameter to a composable unless it is passed into that composable's root UI node.
 - Do not create decorative or placeholder modifiers just to keep an API symmetrical. Add modifiers only when they carry layout, behavior, or semantics that the component actually needs.
+- Use opaque colors for screen and component container/background surfaces. Do not use `copy(alpha = ...)` for those colors.

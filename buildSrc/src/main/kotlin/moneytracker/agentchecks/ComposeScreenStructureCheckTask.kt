@@ -9,6 +9,7 @@ import org.gradle.api.tasks.TaskAction
 /**
  * Harness check: every public Compose screen function must have a private
  * content function with the same prefix, for example MainScreen -> MainScreenContent.
+ * Public screen and UI component composables must also have a matching preview.
  */
 abstract class ComposeScreenStructureCheckTask : DefaultTask(), ProjectRootCheckTask {
     @get:Internal
@@ -16,7 +17,7 @@ abstract class ComposeScreenStructureCheckTask : DefaultTask(), ProjectRootCheck
 
     init {
         group = "verification"
-        description = "Checks that Compose screens are split into Screen and private ScreenContent functions."
+        description = "Checks Compose screen structure and required previews."
     }
 
     @TaskAction
@@ -31,13 +32,22 @@ abstract class ComposeScreenStructureCheckTask : DefaultTask(), ProjectRootCheck
             }
             .flatMap { file ->
                 val text = file.readText()
-                findPublicScreenNames(text)
+                val screenViolations = findPublicScreenNames(text)
                     .filterNot { screenName ->
                         text.contains("private fun ${screenName}Content(")
                     }
                     .map { screenName ->
                         "${file.relativeTo(root).invariantSeparatorsPath}: public screen $screenName must have private ${screenName}Content"
                     }
+                val previewViolations = findPublicPreviewRequiredComposableNames(text)
+                    .filterNot { composableName ->
+                        hasPreviewForComposable(text, composableName)
+                    }
+                    .map { composableName ->
+                        "${file.relativeTo(root).invariantSeparatorsPath}: composable $composableName must have a matching @Preview"
+                    }
+
+                screenViolations + previewViolations
             }
             .toList()
 
@@ -60,5 +70,22 @@ abstract class ComposeScreenStructureCheckTask : DefaultTask(), ProjectRootCheck
                 beforeFunction.takeLast(120).contains("@Composable")
             }
             .toList()
+    }
+
+    private fun findPublicPreviewRequiredComposableNames(text: String): List<String> {
+        val functionRegex = Regex("""(?m)^(?!private\s)fun\s+([A-Z][A-Za-z0-9]*(?:Screen|Row|Card|Item|State|Content))\s*\(""")
+        return functionRegex.findAll(text)
+            .map { match -> match.groupValues[1] }
+            .filter { composableName ->
+                val beforeFunction = text.substring(0, text.indexOf("fun $composableName"))
+                beforeFunction.takeLast(120).contains("@Composable")
+            }
+            .toList()
+    }
+
+    private fun hasPreviewForComposable(text: String, composableName: String): Boolean {
+        val previewFunctionRegex = Regex("""(?s)@Preview[^\n]*(?:\n@[^\n]*)*\nfun\s+\w*${Regex.escape(composableName)}\w*Preview\s*\(""")
+        val directPreviewRegex = Regex("""(?s)@Preview[^\n]*(?:\n@[^\n]*)*\nfun\s+${Regex.escape(composableName)}\s*\(""")
+        return previewFunctionRegex.containsMatchIn(text) || directPreviewRegex.containsMatchIn(text)
     }
 }
